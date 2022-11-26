@@ -1,0 +1,6 @@
+enum Genre{
+  Masculin,
+  Feminin
+
+
+}
