@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter TP advanced',
       theme: ThemeData(
 
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
       home:  MainPage( title: 'Tp advanced | By PinceG',)
     );

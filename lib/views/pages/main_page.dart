@@ -40,6 +40,8 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       drawer: customDrawer(),
       appBar: AppBar(
+        toolbarHeight: 80,
+        elevation: 5,
         title: Text("Inscription"),
         actions: [
           IconButton(onPressed:addMessage_by_snack , icon: Icon(Icons.add)),

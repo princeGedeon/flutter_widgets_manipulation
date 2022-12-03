@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'dart:math';
+
+
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tp_cours_advanced_widgets/models/model_widget/navigation_models.dart';
@@ -25,7 +25,7 @@ class _PageFormState extends State<PageForm> {
   Genre initialGenre=Genre.Masculin;
   bool _isloading=false;
   bool _isDisplay=false;
-  String? imagPath;
+  String imagPath="assets/10490451.jpg";
   final _formkey=GlobalKey<FormState>();
   Map<String,bool> hoobies={
     "Mangas":false,
@@ -80,7 +80,7 @@ class _PageFormState extends State<PageForm> {
                   children:[
                     CircleAvatar(
                       radius: 60,
-                      foregroundImage: AssetImage("assets/10490451.jpg"),
+                      foregroundImage: AssetImage(imagPath),
                     ),
 
                     ElevatedButton(onPressed: ()=>takePicture(ImageSource.gallery), child: Icon(Icons.camera),style: ButtonStyle(
@@ -169,16 +169,12 @@ class _PageFormState extends State<PageForm> {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                ElevatedButton(onPressed: (){
-                 if (_formkey.currentState!.validate()){
-                   setState((){
-                     _isDisplay=true;
-                   });
-                   user=User(nom: nomcontroller.text, password: nomcontroller.text, genre:initialGenre);
-
-                 }
-
-                }, child: Text("Valider")),
+                ElevatedButton(onPressed:(){
+          if (_formkey.currentState!.validate()) {
+            showdialog(context);
+          }
+                },
+               child: Text("Valider")),
                 SizedBox(width: 15,),
               _isloading?CircularProgressIndicator():SizedBox()
               ],
@@ -195,6 +191,42 @@ class _PageFormState extends State<PageForm> {
 
 
     );
+  }
+
+   showdialog(BuildContext context) async {
+    return  showDialog(context: context, builder:(context){
+      return AlertDialog(
+        title: Text("Confirmation"),
+        content: Text("Voulez-vous vraiment confirmer?"),
+        actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("Non")),
+          TextButton(onPressed: () async{
+
+
+        setState(() {
+          _isloading=true;
+        });
+        //Declencher une action apres 5seconde
+        Navigator.pop(context);
+        Future.delayed(Duration(seconds: 5),(){
+          setState(() {
+            _isloading=false;
+            _isDisplay = true;
+
+            user = User(nom: nomcontroller.text,
+                password: nomcontroller.text,
+                genre: initialGenre);
+          });
+        });
+
+
+
+          }, child: Text("Oui"))
+        ],
+      );
+    });
   }
 
   Column funcHobbies(){
@@ -229,11 +261,29 @@ class _PageFormState extends State<PageForm> {
 
   Widget maCard(){
     return Card(
-      child: Column(
-        children: [
-          Text("Mes informations"),
-          Text("nom : ${user.nom}")
-        ],
+
+      child: Container(
+        width: MediaQuery.of(context).size.width*0.75,
+        height: 150,
+        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+        child:Column(
+          children: [
+            Text("Mes informations",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),textAlign: TextAlign.center,),
+            SizedBox(height: 15,),
+            Text("nom : ${user.nom}"),
+            Text("Genre : ${user.genre}"),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: Column(
+                children: [
+                  Text("Mes passions",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+
+                ],
+              ),
+            )
+            
+          ],
+        )
       ),
     );
   }
